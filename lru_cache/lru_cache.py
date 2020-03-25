@@ -30,8 +30,12 @@ class LRUCache:
     def get(self, key):
         # check if key is in the dictionary
         if key in self.dict:
+            # get the node from the dictionary
             node = self.dict[key]
+            # move the node to the back of the cache
             self.cache.move_to_end(node)
+            # the node's value is a list of shape [key, value], 
+            # so node.value[1] returns the value of the node
             return node.value[1]
         else:
             return None
