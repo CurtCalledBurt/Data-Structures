@@ -12,21 +12,76 @@ class BinarySearchTree:
 
     # Insert the given value into the tree
     def insert(self, value):
-        pass
+
+        # if the value is less than the current node, go left
+        if value < self.value:
+            # check if we can go left
+            if self.left is None:
+                # there is no value to the left, so we insert the new value
+                self.left = BinarySearchTree(value)
+            else:
+                # we continue down the tree
+                self.left.insert(value)
+
+        # if the value is greater than the current node or a duplicate, go right
+        elif value >= self.value:
+            # we check if we can go right
+            if self.right is None:
+                # if there is no value on the right we insert the new value
+                self.right = BinarySearchTree(value)
+            else:
+                # we continue down the tree
+                self.right.insert(value)
+        
 
     # Return True if the tree contains the value
     # False if it does not
     def contains(self, target):
-        pass
+
+        # if target is smaller than current node, go left
+        if target < self.value:
+            # if there is no left, the target DNE, return false
+            if self.left is None:
+                return False
+            # Go left
+            else:
+                return self.left.contains(target)
+        # if target is greater than current node, go right
+        elif target > self.value:
+            # if there is no right, the target DNE, return false
+            if self.right is None:
+                return False
+            # Go right
+            else:
+                return self.right.contains(target)
+        # else, the target is equal to the current node, return true
+        else:
+            return True
 
     # Return the maximum value found in the tree
     def get_max(self):
-        pass
+        # we check if there is a bigger value
+        if self.right is None:
+            # if there is no bigger value, we return the current value
+            return self.value
+        else:
+            # if there is a bigger value, we continue down the tree
+            return self.right.get_max()
+
 
     # Call the function `cb` on the value of each node
     # You may use a recursive or iterative approach
     def for_each(self, cb):
-        pass
+        # we check if there is a way to go on both the left and right sides
+        if self.left is not None:
+            # if there is a branch to the left we call cb on it
+            self.left.for_each(cb)
+        if self.right is not None:
+            # if there is a branch to the right we call cb on it
+            self.right.for_each(cb)
+        # we call cb on every leaf that isn't None
+        cb(self.value)
+
 
     # DAY 2 Project -----------------------
 
