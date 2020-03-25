@@ -16,7 +16,6 @@ class LRUCache:
     """
     def __init__(self, limit=10):
         self.max_nodes = limit
-        self.num_current_nodes = 0
         self.cache = DoublyLinkedList()
         self.dict = {}
 
@@ -37,6 +36,7 @@ class LRUCache:
             # the node's value is a list of shape [key, value], 
             # so node.value[1] returns the value of the node
             return node.value[1]
+        # if the key isn't in the dictionary, return None
         else:
             return None
 
@@ -54,28 +54,28 @@ class LRUCache:
         # if key is not in use, create a new node
         if key not in self.dict:
             # create a Node with key and value in DLList
-            self.cache.add_to_tail([key, value])
-            # add the node we just added to the cache tail to the dict
+            self.cache.add_to_tail((key, value))
+            # add the Node to the dictionary
             self.dict[key] = self.cache.tail
-            # increment current node count
-            self.num_current_nodes += 1
 
         # check if key is already in use
         else:
             # get the node in question
             node = self.dict[key]   
             # update the node's value
-            node.value = [key, value]
+            node.value = (key, value)
             # move node to back of the DLL
             self.cache.move_to_end(node)
+            # if key is in use, the size of the cache stays the same, 
+            # so the node max hasn't been reached. So we can return here 
+            # to make this just a bit faster
+            return
 
         # if the node limit is reached delete the LRUsed
-        if self.max_nodes < self.num_current_nodes:
-            # get node to be removed
-            node = self.cache.head
-            # remove the key from dict
-            self.dict.pop(node.value[0], None)
+        if self.max_nodes < len(self.cache):
+            # get key of node to be removed
+            key_of_oldest = self.cache.head.value[0]
+            # remove the node from dictionary
+            del self.dict[key_of_oldest]
             # remove the node from the list
             self.cache.remove_from_head()
-            # decrement the size counter
-            self.num_current_nodes -= 1
