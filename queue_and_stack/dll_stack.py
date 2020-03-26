@@ -21,7 +21,7 @@ class Stack:
             self.size -= 1
             return self.storage.remove_from_tail()
 
-    def len(self):
+    def __len__(self):
         return self.size
 
     # created and included mostly to find bugs

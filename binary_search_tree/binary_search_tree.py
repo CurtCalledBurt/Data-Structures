@@ -73,10 +73,10 @@ class BinarySearchTree:
     # You may use a recursive or iterative approach
     def for_each(self, cb):
         # we check if there is a way to go on both the left and right sides
-        if self.left is not None:
+        if self.left:
             # if there is a branch to the left we call cb on it
             self.left.for_each(cb)
-        if self.right is not None:
+        if self.right:
             # if there is a branch to the right we call cb on it
             self.right.for_each(cb)
         # we call cb on every leaf that isn't None
@@ -88,17 +88,61 @@ class BinarySearchTree:
     # Print all the values in order from low to high
     # Hint:  Use a recursive, depth first traversal
     def in_order_print(self, node):
-        pass
+        # go to the left until we can't anymore
+        if self.left:
+            self.left.in_order_print(self.left)
+        # print the thing we are on
+        print(self.value)
+        # go right if we 
+        # 1) cannot go left and 
+        # 2) can go right
+        if self.right:
+            self.right.in_order_print(self.right)
 
     # Print the value of every node, starting with the given node,
     # in an iterative breadth first traversal
     def bft_print(self, node):
-        pass
+        """ Breath-first traversal"""
+
+        # create the queue
+        queue = Queue()
+        # add our starting leaf to the queue
+        queue.enqueue(node)
+        # loop while there are still leaves in the queue
+        while len(queue) > 0:
+            # remove the queued element and print it
+            node = queue.dequeue()
+            print(node.value)
+            # add children to the queue
+            if node.left:
+                queue.enqueue(node.left)
+            if node.right:
+                queue.enqueue(node.right)
+        return
 
     # Print the value of every node, starting with the given node,
     # in an iterative depth first traversal
     def dft_print(self, node):
-        pass
+        """ Depth-first traversal"""
+
+        # create the stack
+        stack = Stack()
+        # add our starting leaf to the stack
+        stack.push(node)
+        # loop while there are still leaves in the stack
+        while len(stack) > 0:
+            # remove the top element of the stack and print it
+            node = stack.pop()
+            print(node.value)
+            # add the left child to the stack if it exists
+            if node.left:
+                stack.push(node.left)
+            # add the right child to the stack if it exists
+            if node.right:
+                stack.push(node.right)
+            # (note, this results in printing the right elements first, as they are last to go in
+            # and therefore, first to go out)
+        return
 
     # STRETCH Goals -------------------------
     # Note: Research may be required
